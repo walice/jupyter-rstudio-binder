@@ -43,14 +43,14 @@ USER ${NB_UID}
 RUN conda install --quiet --yes \
     'r-base=4.1.0' \
     'r-caret' \
-    'r-crayon' \
+    #'r-crayon' \
     'r-devtools' \
     'r-forecast' \
     'r-hexbin' \
     'r-htmltools' \
     'r-htmlwidgets' \
     'r-irkernel' \
-    'r-nycflights13' \
+    #'r-nycflights13' \
     'r-randomforest' \
     'r-rcurl' \
     'r-rmarkdown' \
@@ -89,7 +89,7 @@ RUN conda install --quiet --yes 'r-e1071' && \
 # from https://github.com/dddlab/docker-notebooks/blob/master/python-rstudio-notebook/Dockerfile
 # Latest possible version before RStudio and jupyter-rsession-proxy break as issue described at
 # https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
-ENV RSTUDIO_VERSION=1.2.5042
+ENV RSTUDIO_VERSION=2022.07.1+554W
 USER root
 
 # RStudio pre-requisites
