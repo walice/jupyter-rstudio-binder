@@ -91,7 +91,8 @@ RUN conda install --quiet --yes 'r-e1071' && \
 # https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
 #ENV RSTUDIO_VERSION=2022.07.1+554W
 USER root
-ENV RSTUDIO_VERSION=2022.02.1-461
+#ENV RSTUDIO_VERSION=2022.02.1-461
+ENV RSTUDIO_VERSION=1.4.1722
 ENV RSESSION_PROXY_RSTUDIO_1_4=yes
 
 # RStudio pre-requisites
