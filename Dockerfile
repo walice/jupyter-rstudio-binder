@@ -2,7 +2,7 @@ FROM jupyter/scipy-notebook:ubuntu-20.04
 LABEL maintainer="Alice Lepissier <alice.lepissier@gmail.com>"
 
 
-##### START Binder compatibility
+###### START Binder code ######
 # from https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
 ARG NB_USER
 ARG NB_UID
@@ -13,10 +13,10 @@ ENV HOME /home/${NB_USER}
 COPY . ${HOME}/work
 USER root
 RUN chown -R ${NB_UID} ${HOME}
-##### END Binder compatibility code
+###### END Binder code ######
 
 
-##### START R code
+###### START R code ######
 # from https://github.com/jupyter/docker-stacks/blob/master/r-notebook/Dockerfile
 
 # R pre-requisites
@@ -82,10 +82,10 @@ RUN conda install --quiet --yes 'r-e1071' && \
 # Install R libraries (arrow package)
 #COPY ./requirements.R .
 #RUN Rscript requirements.R && rm requirements.R
-##### END R code
+###### END R code ######
 
 
-##### START RStudio code
+###### START RStudio code ######
 # from https://github.com/dddlab/docker-notebooks/blob/master/python-rstudio-notebook/Dockerfile
 # Latest possible version before RStudio and jupyter-rsession-proxy break as issue described at
 # https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
@@ -123,9 +123,9 @@ ENV PATH=$PATH:/${NB_USER}/lib/rstudio-server/bin \
 ARG LITTLER=${R_HOME}/library/littler
 
 RUN \
-    # Download R studio
+    # Download RStudio
     curl --silent -L --fail https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb > /tmp/rstudio.deb && \
-    # Install R studio
+    # Install RStudio
     apt-get update && \
     apt-get install -y --no-install-recommends /tmp/rstudio.deb && \
     rm /tmp/rstudio.deb && \
@@ -144,13 +144,14 @@ RUN \
     ldconfig && \
     fix-permissions ${CONDA_DIR} && \
     fix-permissions /home/${NB_USER}
-##### END RStudio code
+###### END RStudio code ######
 
 
 USER ${NB_USER}
 
 
-##### Jupyter notebook extensions & packages
+###### START Jupyter code ######
+# Jupyter notebook extensions & packages
 RUN \
     pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
     jupyter contrib nbextension install --sys-prefix && \
@@ -181,18 +182,17 @@ RUN conda install -y -c conda-forge cartopy && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-
-##### Jupyter Lab extensions
+# Jupyter Lab extensions
 RUN jupyter labextension install nbdime-jupyterlab
 
-
-##### Jupyter & RStudio
+# Jupyter & RStudio
 # from https://github.com/dddlab/docker-notebooks/blob/master/python-rstudio-notebook/Dockerfile
 RUN pip install jupyter-server-proxy jupyter-rsession-proxy && \
     \
     # Remove cache
     rm -rf ~/.cache/pip ~/.cache/matplotlib ~/.cache/yarn && \
     \
- #   conda clean --all -f -y && \
+#   conda clean --all -f -y && \
     fix-permissions ${CONDA_DIR} && \
     fix-permissions /home/${NB_USER}
+###### END Jupyter code ######
