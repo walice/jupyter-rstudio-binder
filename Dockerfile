@@ -154,10 +154,13 @@ RUN \
     #curl --silent -L --fail https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb > /tmp/rstudio.deb && \
     wget -q https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb > /tmp/rstudio.deb && \
     # Install RStudio
-    apt-get update && \
-    apt-get install -y --no-install-recommends /tmp/rstudio.deb && \
+    sudo apt install gdebi-core && \
+    sudo gdebi /tmp/rstudio.deb && \
+    #apt-get update && \
+    #apt-get install -y --no-install-recommends /tmp/rstudio.deb && \
     rm /tmp/rstudio.deb && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* && \
+    #apt-get clean && \
+    #rm -rf /var/lib/apt/lists/* && \
     # Set default CRAN mirror
     echo -e "local({\n r <- getOption('repos')\n r['CRAN'] <- 'https://cloud.r-project.org'\n  options(repos = r)\n })" > $R_HOME/etc/Rprofile.site && \
     \
