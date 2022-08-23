@@ -96,27 +96,54 @@ USER root
 # from https://github.com/rstudio/rstudio-docker-products/blob/main/r-session-complete/bionic/Dockerfile
 # and https://support.rstudio.com/hc/en-us/articles/206794537-Common-dependencies-for-RStudio-Workbench-and-RStudio-Server
 # and https://github.com/rocker-org/rocker-versioned/blob/master/rstudio/3.6.3.Dockerfile
+# from https://github.com/radiant-rstats/docker/blob/master/files/install-rstudio.sh
+# from https://github.com/rstudio/rstudio-docker-products/
+# and https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh
+# and https://github.com/radiant-rstats/docker/blob/master/files/install-R.sh
+# and https://support.rstudio.com/hc/en-us/articles/206794537-Common-dependencies-for-RStudio-Workbench-and-RStudio-Server
+# and (v1) https://github.com/rocker-org/rocker-versioned/blob/master/rstudio/3.6.3.Dockerfile
 RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
-        psmisc \
-        libapparmor1 \
-        lsb-release \
-        libclang-dev \
-        zip unzip \
-        tree \
-        libedit2 \
-        libc6 \
-        psmisc \
-        rrdtool \
-        libcurl4-gnutls-dev \
-        libssl1.1 \
-        libssl-dev \
-        libuser \
-        libuser1-dev \
-        libpq-dev \
-        libpq5 \
-        curl && \
+    bash-completion \
+    ca-certificates \
+    file \
+    gdebi-core \
+    libapparmor1 \
+    #libgc1c2 \
+    libblas-dev \
+    libc6 \
+    libclang-dev \
+    libbz2-* \
+    libcurl4 \
+    libcurl4-openssl-dev \
+    #libcurl4-gnutls-dev \
+    libedit2 \
+    libicu* \
+    libjpeg-turbo* \
+    liblapack-dev \
+    libobjc4 \
+    libpangocairo-* \
+    #libpcre2* \
+    libpng16* \
+    libpq5 \
+    #libpq-dev \
+    #libssl1.1 \
+    libssl-dev \
+    libtiff* \
+    #libuser \
+    #libuser1-dev \
+    liblzma* \
+    lsb-release \
+    procps \
+    psmisc \
+    python-setuptools \
+    rrdtool \
+    tree \
+    sudo \
+    wget \
+    zip unzip && \        
     apt-get clean && rm -rf /var/lib/apt/lists/* 
+ 
 
 ENV PATH=$PATH:/${NB_USER}/lib/rstudio-server/bin \
     R_HOME=/opt/conda/lib/R
