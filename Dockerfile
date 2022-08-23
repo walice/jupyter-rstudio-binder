@@ -41,7 +41,7 @@ USER ${NB_UID}
 # Use older version of R and build from source
 # Because R graphics engine version 14 is not supported by this version of RStudio
 RUN conda install --quiet --yes \
-    'r-base=4.1.0' \
+    'r-base' \
     'r-caret' \
     #'r-crayon' \
     'r-devtools' \
