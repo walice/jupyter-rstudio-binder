@@ -89,8 +89,10 @@ RUN conda install --quiet --yes 'r-e1071' && \
 # from https://github.com/dddlab/docker-notebooks/blob/master/python-rstudio-notebook/Dockerfile
 # Latest possible version before RStudio and jupyter-rsession-proxy break as issue described at
 # https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
-ENV RSTUDIO_VERSION=2022.07.1+554W
+#ENV RSTUDIO_VERSION=2022.07.1+554W
 USER root
+ENV RSTUDIO_VERSION=2022.02.1-461
+ENV RSESSION_PROXY_RSTUDIO_1_4=yes
 
 # RStudio pre-requisites
 # from https://github.com/rstudio/rstudio-docker-products/blob/main/r-session-complete/bionic/Dockerfile
@@ -155,14 +157,17 @@ RUN \
     #wget -q https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb > /tmp/rstudio.deb && \
     # Install RStudio
     sudo apt-get install gdebi-core && \
-    wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb && \
-    sudo gdebi rstudio-server-2022.07.1-554-amd64.deb && \
+    #wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb && \
+    #sudo gdebi rstudio-server-2022.07.1-554-amd64.deb && \
     #apt-get update && \
     #apt-get install gdebi-core && \
     #apt-get install -y -f --no-install-recommends /tmp/rstudio.deb && \
     #gdebi /tmp/rstudio.deb && \    
     #rm /tmp/rstudio.deb && \
     #apt-get clean && \
+    wget --quiet https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
+    gdebi -n rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
+    rm rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
     rm -rf /var/lib/apt/lists/* && \
     # Set default CRAN mirror
     echo -e "local({\n r <- getOption('repos')\n r['CRAN'] <- 'https://cloud.r-project.org'\n  options(repos = r)\n })" > $R_HOME/etc/Rprofile.site && \
@@ -223,8 +228,8 @@ USER ${NB_USER}
 # from https://jupyter-server-proxy.readthedocs.io/en/latest/install.html
 # and https://github.com/jupyterhub/jupyter-rsession-proxy
 RUN pip install jupyter-server-proxy jupyter-rsession-proxy && \
-    jupyter serverextension enable --sys-prefix jupyter_server_proxy && \
-    \
+    # jupyter serverextension enable --sys-prefix jupyter_server_proxy && \
+    #\
     # Remove cache
     rm -rf ~/.cache/pip ~/.cache/matplotlib ~/.cache/yarn && \
     \
