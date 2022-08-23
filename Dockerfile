@@ -155,9 +155,9 @@ RUN \
     wget -q https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb > /tmp/rstudio.deb && \
     # Install RStudio
     apt-get update && \
-    apt-get install gdebi-core && \
-    #apt-get install -y --no-install-recommends /tmp/rstudio.deb && \
-    gdebi /tmp/rstudio.deb && \    
+    #apt-get install gdebi-core && \
+    apt-get install -y -f --no-install-recommends /tmp/rstudio.deb && \
+    #gdebi /tmp/rstudio.deb && \    
     rm /tmp/rstudio.deb && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
