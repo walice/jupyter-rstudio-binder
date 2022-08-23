@@ -152,14 +152,17 @@ ARG LITTLER=${R_HOME}/library/littler
 RUN \
     # Download RStudio
     #curl --silent -L --fail https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb > /tmp/rstudio.deb && \
-    wget -q https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb > /tmp/rstudio.deb && \
+    #wget -q https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb > /tmp/rstudio.deb && \
     # Install RStudio
-    apt-get update && \
+    sudo apt-get install gdebi-core && \
+    wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb && \
+    sudo gdebi rstudio-server-2022.07.1-554-amd64.deb && \
+    #apt-get update && \
     #apt-get install gdebi-core && \
-    apt-get install -y -f --no-install-recommends /tmp/rstudio.deb && \
+    #apt-get install -y -f --no-install-recommends /tmp/rstudio.deb && \
     #gdebi /tmp/rstudio.deb && \    
-    rm /tmp/rstudio.deb && \
-    apt-get clean && \
+    #rm /tmp/rstudio.deb && \
+    #apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     # Set default CRAN mirror
     echo -e "local({\n r <- getOption('repos')\n r['CRAN'] <- 'https://cloud.r-project.org'\n  options(repos = r)\n })" > $R_HOME/etc/Rprofile.site && \
