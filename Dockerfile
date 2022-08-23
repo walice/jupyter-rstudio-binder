@@ -220,8 +220,10 @@ USER ${NB_USER}
 #RUN jupyter labextension install nbdime-jupyterlab
 
 # Jupyter & RStudio
-# from https://github.com/dddlab/docker-notebooks/blob/master/python-rstudio-notebook/Dockerfile
+# from https://jupyter-server-proxy.readthedocs.io/en/latest/install.html
+# and https://github.com/jupyterhub/jupyter-rsession-proxy
 RUN pip install jupyter-server-proxy jupyter-rsession-proxy && \
+    jupyter serverextension enable --sys-prefix jupyter_server_proxy && \
     \
     # Remove cache
     rm -rf ~/.cache/pip ~/.cache/matplotlib ~/.cache/yarn && \
