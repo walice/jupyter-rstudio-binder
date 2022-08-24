@@ -184,17 +184,26 @@ RUN \
     openpyxl pyreadr networkx joypy && \
     \
     # Install Jupyter Notebook extensions
-    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
-    rise nbzip nbdime && \
+    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
     # Enable GUI configurator for Jupyter Notebook extensions
     jupyter nbextensions_configurator enable --sys-prefix && \
     \
-    # Enable Jupyter Notebook extensions
-    jupyter contrib nbextension install rise nbzip nbdime toc2 export_embedded --sys-prefix && \
-    jupyter nbextension enable rise nbzip nbdime toc2/main export_embedded/main --sys-prefix
-    #&& \
-    #\
-    #jupyter serverextension enable nbzip nbdime --py --sys-prefix
+    jupyter nbextension enable toc2/main --sys-prefix && \
+    jupyter nbextension enable export_embedded/main --sys-prefix && \
+    \
+    pip install --pre rise && \
+    jupyter contrib nbextension install rise --py --sys-prefix && \
+    jupyter nbextension enable rise --py --sys-prefix && \
+    \
+    pip install nbzip && \
+    #jupyter serverextension enable nbzip --py --sys-prefix && \
+    jupyter contrib nbextension install nbzip --py --sys-prefix && \
+    jupyter nbextension enable nbzip --py --sys-prefix && \
+    \
+    pip install nbdime && \
+    #jupyter serverextension enable --py nbdime --sys-prefix && \
+    jupyter contrib nbextension install nbdime --sys-prefix && \
+    jupyter nbextension enable nbdime --sys-prefix
     
 #RUN conda install -y -c conda-forge cartopy && \
 #    conda clean --all -f -y && \
