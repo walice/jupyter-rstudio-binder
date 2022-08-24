@@ -65,7 +65,7 @@ RUN conda install --quiet --yes \
     'r-tidyverse' \
     # START new packages - maybe would be better in requirements.R
     'r-here' \
-    'r-feather' \
+    #'r-feather' \
     'r-ggridges' \
     'r-janitor' \
     'r-kableExtra' \
