@@ -189,23 +189,27 @@ RUN \
     # Enable GUI configurator for Jupyter Notebook extensions (can be skipped for notebook >=5.3)
     #jupyter nbextensions_configurator enable --sys-prefix && \ 
     \
-    jupyter nbextension enable toc2/main --sys-prefix && \
+    # Enable extensions from jupyter_contrib_nbextensions
+    # from https://github.com/ipython-contrib/jupyter_contrib_nbextensions/tree/master/src/jupyter_contrib_nbextensions/nbextensions
     jupyter nbextension enable export_embedded/main --sys-prefix && \
+    jupyter nbextension enable hinterland/hinterland --sys-prefix && \
+    jupyter nbextension enable scratchpad/main --sys-prefix && \
+    jupyter nbextension enable toc2/main --sys-prefix && \
     \
-    pip install --pre rise && \
-    jupyter nbextension install rise --py --sys-prefix && \
+    # https://rise.readthedocs.io/en/stable/installation.html
+    pip install RISE && \
+    #jupyter nbextension install rise --py --sys-prefix && \
     jupyter nbextension enable rise --py --sys-prefix && \
     \
+    # https://github.com/data-8/nbzip/blob/master/README.md
     pip install nbzip && \
-    jupyter serverextension enable nbzip --py --sys-prefix && \
-    jupyter nbextension install nbzip --py --sys-prefix && \
-    jupyter nbextension enable nbzip --py --sys-prefix
-    # && \
-    #\
-    #pip install nbdime && \
-    #jupyter serverextension enable nbdime --py --sys-prefix && \
-    #jupyter nbextension install nbdime --sys-prefix && \
-    #jupyter nbextension enable nbdime --sys-prefix
+    jupyter serverextension enable --py nbzip --sys-prefix && \
+    jupyter nbextension install --py nbzip --sys-prefix && \
+    jupyter nbextension enable --py nbzip --sys-prefix && \
+    \
+    # https://nbdime.readthedocs.io/en/latest/installing.html
+    pip install --upgrade nbdime && \
+    nbdime extensions --enable --sys-prefix
     
 #RUN conda install -y -c conda-forge cartopy && \
 #    conda clean --all -f -y && \
