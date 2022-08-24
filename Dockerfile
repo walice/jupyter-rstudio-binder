@@ -178,30 +178,30 @@ USER ${NB_USER}
 ###### START Jupyter code ######
 
 # Jupyter notebook extensions & packages
-#RUN \
-#    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
-#    jupyter contrib nbextension install --sys-prefix && \
-#    jupyter nbextensions_configurator enable --sys-prefix && \
-#    \
-#    jupyter nbextension enable toc2/main --sys-prefix && \
-#    jupyter nbextension enable export_embedded/main --sys-prefix && \
-#    \
-#    pip install --pre rise && \
-#    jupyter nbextension install rise --py --sys-prefix && \
-#    jupyter nbextension enable rise --py --sys-prefix && \
-#    \
-#    pip install nbzip && \
-#    jupyter serverextension enable nbzip --py --sys-prefix && \
-#    jupyter nbextension install nbzip --py --sys-prefix && \
-#    jupyter nbextension enable nbzip --py --sys-prefix && \
-#    \
-#    pip install nbdime && \
-#    jupyter serverextension enable --py nbdime --sys-prefix && \
-#    jupyter nbextension install --py nbdime --sys-prefix && \
-#    jupyter nbextension enable --py nbdime --sys-prefix && \
-#    \
-#    pip install lightgbm pyarrow feather-format papermill nested-cv \
-#    openpyxl pyreadr networkx==2.5 joypy
+RUN \
+    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
+    jupyter contrib nbextension install --sys-prefix && \
+    jupyter nbextensions_configurator enable --sys-prefix && \
+    \
+    jupyter nbextension enable toc2/main --sys-prefix && \
+    jupyter nbextension enable export_embedded/main --sys-prefix && \
+    \
+    pip install --pre rise && \
+    jupyter nbextension install rise --py --sys-prefix && \
+    jupyter nbextension enable rise --py --sys-prefix && \
+    \
+    pip install nbzip && \
+    jupyter serverextension enable nbzip --py --sys-prefix && \
+    jupyter nbextension install nbzip --py --sys-prefix && \
+    jupyter nbextension enable nbzip --py --sys-prefix && \
+    \
+    pip install nbdime && \
+    jupyter serverextension enable --py nbdime --sys-prefix && \
+    jupyter nbextension install --py nbdime --sys-prefix && \
+    jupyter nbextension enable --py nbdime --sys-prefix && \
+    \
+    pip install lightgbm papermill \
+    openpyxl pyreadr networkx==2.5 joypy
     
 #RUN conda install -y -c conda-forge cartopy && \
 #    conda clean --all -f -y && \
