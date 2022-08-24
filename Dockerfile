@@ -198,7 +198,6 @@ RUN \
     \
     # https://rise.readthedocs.io/en/stable/installation.html
     pip install RISE && \
-    #jupyter nbextension install rise --py --sys-prefix && \
     jupyter nbextension enable rise --py --sys-prefix && \
     \
     # https://github.com/data-8/nbzip/blob/master/README.md
@@ -211,13 +210,15 @@ RUN \
     pip install --upgrade nbdime && \
     nbdime extensions --enable --sys-prefix
     
-#RUN conda install -y -c conda-forge cartopy && \
-#    conda clean --all -f -y && \
-#    fix-permissions "${CONDA_DIR}" && \
-#    fix-permissions "/home/${NB_USER}"
+# Other Python packages    
+RUN conda install -y -c conda-forge cartopy && \
+    conda clean --all -f -y && \
+    fix-permissions "${CONDA_DIR}" && \
+    fix-permissions "/home/${NB_USER}"
 
 # Jupyter Lab extensions
-#RUN jupyter labextension install nbdime-jupyterlab
+# https://github.com/jupyterlab/jupyterlab-github
+#RUN pip install jupyterlab_github
 
 # Jupyter Server & RStudio configuration
 # Documentation: https://github.com/jupyterhub/jupyter-server-proxy
