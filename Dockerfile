@@ -4,12 +4,15 @@ LABEL maintainer="Alice Lepissier <alice.lepissier@gmail.com>"
 
 ###### START Binder code ######
 # from https://mybinder.readthedocs.io/en/latest/tutorials/dockerfile.html
+# Binder does not allow root container processes
+# and ${NB_USER} will run the JupyterLab process on Binder
 ARG NB_USER
 ARG NB_UID
 ENV USER ${NB_USER}
 ENV NB_UID ${NB_UID}
 ENV HOME /home/${NB_USER}
 
+# To work on Binder, the contents of the repo must be in ${HOME}
 COPY . ${HOME}/work
 USER root
 RUN chown -R ${NB_UID} ${HOME}
@@ -28,29 +31,30 @@ RUN apt-get update --yes && \
     r-cran-rodbc \
     gfortran \
     gcc \
+    # libfontconfig1-dev is a dependency of kableExtra/systemfonts
     libfontconfig1-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
-# libfontconfig1-dev is a dependency for kableExtra/systemfonts
 
 # Fix for devtools https://github.com/conda-forge/r-devtools-feedstock/issues/4
 RUN ln -s /bin/tar /bin/gtar
 
+
 USER ${NB_UID}
 
-# R packages including IRKernel which gets installed globally.
-# Use older version of R and build from source
-# Because R graphics engine version 14 is not supported by this version of RStudio
+
+# R packages including IRKernel which gets installed globally
 RUN conda install --quiet --yes \
     'r-base' \
     'r-caret' \
-    #'r-crayon' \
+    'r-crayon' \
     'r-devtools' \
+    # e1071 is a dependency of the caret R package
+    'r-e1071' \
     'r-forecast' \
     'r-hexbin' \
     'r-htmltools' \
     'r-htmlwidgets' \
     'r-irkernel' \
-    #'r-nycflights13' \
     'r-randomforest' \
     'r-rcurl' \
     'r-rmarkdown' \
@@ -59,6 +63,7 @@ RUN conda install --quiet --yes \
     'r-shiny' \
     'r-tidymodels' \
     'r-tidyverse' \
+    # START new packages - maybe would be better in requirements.R
     'r-here' \
     'r-feather' \
     'r-ggridges' \
@@ -68,42 +73,33 @@ RUN conda install --quiet --yes \
     'r-plm' \
     'r-stargazer' \
     'r-WDI' \
+    # END new packages
     'unixodbc' && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
 
-# Install e1071 R package (dependency of the caret R package)
-RUN conda install --quiet --yes 'r-e1071' && \
-    conda clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
-
-# Install R libraries (arrow package)
+# Install R libraries
 #COPY ./requirements.R .
 #RUN Rscript requirements.R && rm requirements.R
 ###### END R code ######
 
 
 ###### START RStudio code ######
-# from https://github.com/dddlab/docker-notebooks/blob/master/python-rstudio-notebook/Dockerfile
-# Latest possible version before RStudio and jupyter-rsession-proxy break as issue described at
-# https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
-#ENV RSTUDIO_VERSION=2022.07.1+554W
 USER root
+# Earlier RStudio version
+# from https://github.com/riazarbi/datasci-gui-minimal/blob/a281fc00c1149cd2d472e117b451d73042ba9e32/Dockerfile
+#ENV RSTUDIO_VERSION=1.4.1722
+# Later RStudio version
+# from https://github.com/riazarbi/datasci-gui-minimal/blob/focal/Dockerfile
 ENV RSTUDIO_VERSION=2022.02.1-461
+# Flag is needed to make RStudio work on JupyterLab
 ENV RSESSION_PROXY_RSTUDIO_1_4=yes
 
 # RStudio pre-requisites
-# from https://github.com/rstudio/rstudio-docker-products/blob/main/r-session-complete/bionic/Dockerfile
-# and https://support.rstudio.com/hc/en-us/articles/206794537-Common-dependencies-for-RStudio-Workbench-and-RStudio-Server
-# and https://github.com/rocker-org/rocker-versioned/blob/master/rstudio/3.6.3.Dockerfile
-# from https://github.com/radiant-rstats/docker/blob/master/files/install-rstudio.sh
-# from https://github.com/rstudio/rstudio-docker-products/
-# and https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh
-# and https://github.com/radiant-rstats/docker/blob/master/files/install-R.sh
-# and https://support.rstudio.com/hc/en-us/articles/206794537-Common-dependencies-for-RStudio-Workbench-and-RStudio-Server
-# and (v1) https://github.com/rocker-org/rocker-versioned/blob/master/rstudio/3.6.3.Dockerfile
+# from https://support.rstudio.com/hc/en-us/articles/206794537-Common-dependencies-for-RStudio-Workbench-and-RStudio-Server
+# and https://github.com/rocker-org/rocker-versioned2
+# and https://github.com/riazarbi/datasci-gui-minimal/blob/focal/Dockerfile
 RUN apt-get update --yes && \
     apt-get install --yes --no-install-recommends \
     bash-completion \
@@ -144,28 +140,17 @@ RUN apt-get update --yes && \
     sudo \
     wget \
     zip unzip && \        
-    apt-get clean && rm -rf /var/lib/apt/lists/* 
- 
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 ENV PATH=$PATH:/${NB_USER}/lib/rstudio-server/bin \
     R_HOME=/opt/conda/lib/R
 ARG LITTLER=${R_HOME}/library/littler
 
 RUN \
-    # Download RStudio
-    #curl --silent -L --fail https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb > /tmp/rstudio.deb && \
-    #wget -q https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb > /tmp/rstudio.deb && \
     # Install RStudio
-    sudo apt-get install gdebi-core && \
-    #wget https://download2.rstudio.org/server/bionic/amd64/rstudio-server-2022.07.1-554-amd64.deb && \
-    #sudo gdebi rstudio-server-2022.07.1-554-amd64.deb && \
-    #apt-get update && \
-    #apt-get install gdebi-core && \
-    #apt-get install -y -f --no-install-recommends /tmp/rstudio.deb && \
-    #gdebi /tmp/rstudio.deb && \    
-    #rm /tmp/rstudio.deb && \
-    #apt-get clean && \
-    wget --quiet https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
+    # from https://github.com/radiant-rstats/docker/blob/master/files/install-rstudio.sh
+    # and https://github.com/rocker-org/rocker-versioned2/blob/master/scripts/install_rstudio.sh
+    wget -q https://s3.amazonaws.com/rstudio-ide-build/server/bionic/amd64/rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
     gdebi -n rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
     rm rstudio-server-${RSTUDIO_VERSION}-amd64.deb && \
     rm -rf /var/lib/apt/lists/* && \
@@ -178,6 +163,7 @@ RUN \
     # Modify littler scripts to conda R location
     sed -i 's/\/${NB_USER}\/local\/lib\/R\/site-library/\/opt\/conda\/lib\/R\/library/g' \
         ${LITTLER}/examples/*.r && \
+    # Create symbolic links
     ln -s ${LITTLER}/bin/r ${LITTLER}/examples/*.r /usr/local/bin/ && \
     echo "${R_HOME}/lib" | sudo tee -a /etc/ld.so.conf.d/littler.conf && \
     ldconfig && \
@@ -190,6 +176,7 @@ USER ${NB_USER}
 
 
 ###### START Jupyter code ######
+
 # Jupyter notebook extensions & packages
 #RUN \
 #    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
@@ -224,16 +211,17 @@ USER ${NB_USER}
 # Jupyter Lab extensions
 #RUN jupyter labextension install nbdime-jupyterlab
 
-# Jupyter & RStudio
-# from https://jupyter-server-proxy.readthedocs.io/en/latest/install.html
+# Jupyter Server & RStudio configuration
+# Documentation: https://github.com/jupyterhub/jupyter-server-proxy
 # and https://github.com/jupyterhub/jupyter-rsession-proxy
+# Known issues with RStudio and Jupyter described at
+# https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
+# and https://github.com/jupyterhub/jupyter-rsession-proxy/issues/95
 RUN pip install jupyter-server-proxy jupyter-rsession-proxy && \
-    # jupyter serverextension enable --sys-prefix jupyter_server_proxy && \
-    #\
     # Remove cache
     rm -rf ~/.cache/pip ~/.cache/matplotlib ~/.cache/yarn && \
     \
-#   conda clean --all -f -y && \
+    conda clean --all -f -y && \
     fix-permissions ${CONDA_DIR} && \
     fix-permissions /home/${NB_USER}
 ###### END Jupyter code ######
