@@ -185,6 +185,7 @@ RUN \
     \
     # Install Jupyter Notebook extensions
     pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
+    jupyter contrib nbextension install --sys-prefix && \
     # Enable GUI configurator for Jupyter Notebook extensions
     jupyter nbextensions_configurator enable --sys-prefix && \
     \
