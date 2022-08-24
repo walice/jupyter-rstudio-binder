@@ -190,8 +190,8 @@ RUN \
     jupyter nbextensions_configurator enable --sys-prefix && \
     \
     # Enable Jupyter Notebook extensions
-    jupyter contrib nbextension install rise nbzip nbdime toc2 export_embedded --py --sys-prefix && \
-    jupyter nbextension enable rise nbzip nbdime toc2 export_embedded --py --sys-prefix
+    jupyter contrib nbextension install rise nbzip nbdime toc2 export_embedded --sys-prefix && \
+    jupyter nbextension enable rise nbzip nbdime toc2/main export_embedded/main --sys-prefix
     #&& \
     #\
     #jupyter serverextension enable nbzip nbdime --py --sys-prefix
