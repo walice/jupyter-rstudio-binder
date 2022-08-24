@@ -192,17 +192,17 @@ RUN \
     jupyter nbextension enable export_embedded/main --sys-prefix && \
     \
     pip install --pre rise && \
-    jupyter contrib nbextension install rise --py --sys-prefix && \
+    jupyter nbextension install rise --py --sys-prefix && \
     jupyter nbextension enable rise --py --sys-prefix && \
     \
     pip install nbzip && \
     #jupyter serverextension enable nbzip --py --sys-prefix && \
-    jupyter contrib nbextension install nbzip --py --sys-prefix && \
+    jupyter nbextension install nbzip --py --sys-prefix && \
     jupyter nbextension enable nbzip --py --sys-prefix && \
     \
     pip install nbdime && \
     #jupyter serverextension enable --py nbdime --sys-prefix && \
-    jupyter contrib nbextension install nbdime --sys-prefix && \
+    jupyter nbextension install nbdime --sys-prefix && \
     jupyter nbextension enable nbdime --sys-prefix
     
 #RUN conda install -y -c conda-forge cartopy && \
