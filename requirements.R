@@ -9,7 +9,7 @@
 
 #Sys.setenv(LIBARROW_BINARY = TRUE)
 install.packages(c("wesanderson",
-		   #"arrow",
+                   #"arrow",
                    "sysfonts",
                    "showtext",
                    "GGally",
