@@ -198,12 +198,13 @@ RUN \
     pip install nbzip && \
     jupyter serverextension enable nbzip --py --sys-prefix && \
     jupyter nbextension install nbzip --py --sys-prefix && \
-    jupyter nbextension enable nbzip --py --sys-prefix && \
-    \
-    pip install nbdime && \
-    jupyter serverextension enable nbdime --py --sys-prefix && \
-    jupyter nbextension install nbdime --sys-prefix && \
-    jupyter nbextension enable nbdime --sys-prefix
+    jupyter nbextension enable nbzip --py --sys-prefix
+    # && \
+    #\
+    #pip install nbdime && \
+    #jupyter serverextension enable nbdime --py --sys-prefix && \
+    #jupyter nbextension install nbdime --sys-prefix && \
+    #jupyter nbextension enable nbdime --sys-prefix
     
 #RUN conda install -y -c conda-forge cartopy && \
 #    conda clean --all -f -y && \
