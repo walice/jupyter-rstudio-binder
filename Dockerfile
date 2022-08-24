@@ -185,13 +185,13 @@ RUN \
     \
     # Install Jupyter Notebook extensions
     pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
-    rise nbzip nbdime toc2/main export_embedded && \
+    rise nbzip nbdime && \
     # Enable GUI configurator for Jupyter Notebook extensions
     jupyter nbextensions_configurator enable --py --sys-prefix && \
     \
     # Enable Jupyter Notebook extensions
-    jupyter contrib nbextension install rise nbzip nbdime toc2/main export_embedded --py --sys-prefix && \
-    jupyter nbextension enable rise nbzip nbdime toc2/main export_embedded --py --sys-prefix
+    jupyter contrib nbextension install rise nbzip nbdime toc2 export_embedded --py --sys-prefix && \
+    jupyter nbextension enable rise nbzip nbdime toc2 export_embedded --py --sys-prefix
     #&& \
     #\
     #jupyter serverextension enable nbzip nbdime --py --sys-prefix
