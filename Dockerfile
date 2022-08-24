@@ -179,29 +179,22 @@ USER ${NB_USER}
 
 # Jupyter notebook extensions & packages
 RUN \
-    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
-    jupyter contrib nbextension install --sys-prefix && \
-    jupyter nbextensions_configurator enable --sys-prefix && \
-    \
-    jupyter nbextension enable toc2/main --sys-prefix && \
-    jupyter nbextension enable export_embedded/main --sys-prefix && \
-    \
-    pip install --pre rise && \
-    jupyter nbextension install rise --py --sys-prefix && \
-    jupyter nbextension enable rise --py --sys-prefix && \
-    \
-    pip install nbzip && \
-    jupyter serverextension enable nbzip --py --sys-prefix && \
-    jupyter nbextension install nbzip --py --sys-prefix && \
-    jupyter nbextension enable nbzip --py --sys-prefix && \
-    \
-    pip install nbdime && \
-    jupyter serverextension enable --py nbdime --sys-prefix && \
-    jupyter nbextension install --py nbdime --sys-prefix && \
-    jupyter nbextension enable --py nbdime --sys-prefix && \
-    \
+    # Python packages
     pip install lightgbm papermill \
-    openpyxl pyreadr networkx==2.5 joypy
+    openpyxl pyreadr networkx joypy && \
+    \
+    # Install Jupyter Notebook extensions
+    pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator \
+    rise nbzip nbdime toc2 export_embedded && \
+    # Enable GUI configurator for Jupyter Notebook extensions
+    jupyter nbextensions_configurator enable --py --sys-prefix && \
+    \
+    # Enable Jupyter Notebook extensions
+    jupyter contrib nbextension install rise nbzip nbdime toc2 export_embedded --py --sys-prefix && \
+    jupyter nbextension enable rise nbzip nbdime toc2 export_embedded --py --sys-prefix
+    #&& \
+    #\
+    #jupyter serverextension enable nbzip nbdime --py --sys-prefix
     
 #RUN conda install -y -c conda-forge cartopy && \
 #    conda clean --all -f -y && \
