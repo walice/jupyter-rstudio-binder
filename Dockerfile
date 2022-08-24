@@ -80,8 +80,8 @@ RUN conda install --quiet --yes \
     fix-permissions "/home/${NB_USER}"
 
 # Install R libraries
-COPY ./requirements.R .
-RUN Rscript requirements.R && rm requirements.R
+#COPY ./requirements.R .
+#RUN Rscript requirements.R && rm requirements.R
 ###### END R code ######
 
 
