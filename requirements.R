@@ -1,6 +1,7 @@
-# IllicitAI
+# jupyter-rstudio-binder
 # Alice Lepissier
 # alice.lepissier@gmail.com
+
 
 ## ## ## ## ## ## ## ## ## ## ##
 # REQUIREMENTS              ####
