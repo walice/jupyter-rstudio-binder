@@ -186,7 +186,9 @@ RUN \
     # Install Jupyter Notebook extensions
     pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
     jupyter contrib nbextension install --sys-prefix && \
-    # Enable GUI configurator for Jupyter Notebook extensions (can be skipped for notebook >=5.3)
+    # Enable GUI configurator for Jupyter Notebook extensions
+    # Known issue: configurator does not load with JupyterLab 3
+    # https://github.com/Jupyter-contrib/jupyter_nbextensions_configurator/issues/127
     #jupyter nbextensions_configurator enable --sys-prefix && \ 
     \
     # Enable extensions from jupyter_contrib_nbextensions
