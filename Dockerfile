@@ -186,8 +186,8 @@ RUN \
     # Install Jupyter Notebook extensions
     pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
     jupyter contrib nbextension install --sys-prefix && \
-    # Enable GUI configurator for Jupyter Notebook extensions
-    jupyter nbextensions_configurator enable --user && \ 
+    # Enable GUI configurator for Jupyter Notebook extensions (can be skipped for notebook >=5.3)
+    #jupyter nbextensions_configurator enable --sys-prefix && \ 
     \
     jupyter nbextension enable toc2/main --sys-prefix && \
     jupyter nbextension enable export_embedded/main --sys-prefix && \
