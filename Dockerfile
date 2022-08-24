@@ -44,7 +44,7 @@ USER ${NB_UID}
 
 # R packages including IRKernel which gets installed globally
 RUN conda install --quiet --yes \
-    'r-base' \
+    'r-base=4.1.3' \
     'r-caret' \
     'r-crayon' \
     'r-devtools' \
@@ -217,7 +217,7 @@ USER ${NB_USER}
 # Known issues with RStudio and Jupyter described at
 # https://github.com/jupyterhub/jupyter-rsession-proxy/issues/93
 # and https://github.com/jupyterhub/jupyter-rsession-proxy/issues/95
-RUN pip install jupyter-server-proxy jupyter-rsession-proxy && \
+RUN pip install jupyter-server-proxy==3.2.1 jupyter-rsession-proxy==2.0.1 && \
     # Remove cache
     rm -rf ~/.cache/pip ~/.cache/matplotlib ~/.cache/yarn && \
     \
