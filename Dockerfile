@@ -45,36 +45,36 @@ USER ${NB_UID}
 # R packages including IRKernel which gets installed globally
 RUN conda install --quiet --yes \
     'r-base=4.1.3' \
-    'r-caret' \
-    'r-crayon' \
-    'r-devtools' \
+    # 'r-caret' \
+    # 'r-crayon' \
+    # 'r-devtools' \
     # e1071 is a dependency of the caret R package
-    'r-e1071' \
-    'r-forecast' \
-    'r-hexbin' \
-    'r-htmltools' \
-    'r-htmlwidgets' \
-    'r-irkernel' \
-    'r-randomforest' \
-    'r-rcurl' \
-    'r-rmarkdown' \
-    'r-rodbc' \
-    'r-rsqlite' \
-    'r-shiny' \
-    'r-tidymodels' \
-    'r-tidyverse' \
+    # 'r-e1071' \
+    # 'r-forecast' \
+    # 'r-hexbin' \
+    # 'r-htmltools' \
+    # 'r-htmlwidgets' \
+    # 'r-irkernel' \
+    # 'r-randomforest' \
+    # 'r-rcurl' \
+    # 'r-rmarkdown' \
+    # 'r-rodbc' \
+    # 'r-rsqlite' \
+    # 'r-shiny' \
+    # 'r-tidymodels' \
+    # 'r-tidyverse' \
     # START new packages - maybe would be better in requirements.R
-    'r-here' \
+    # 'r-here' \
     #'r-feather' \
-    'r-ggridges' \
-    'r-janitor' \
-    'r-kableExtra' \
-    'r-lfe' \
-    'r-plm' \
-    'r-stargazer' \
-    'r-WDI' \
+    # 'r-ggridges' \
+    # 'r-janitor' \
+    # 'r-kableExtra' \
+    # 'r-lfe' \
+    # 'r-plm' \
+    # 'r-stargazer' \
+    # 'r-WDI' \
     # END new packages
-    'unixodbc' && \
+    # 'unixodbc' && \
     conda clean --all -f -y && \
     fix-permissions "${CONDA_DIR}" && \
     fix-permissions "/home/${NB_USER}"
@@ -180,8 +180,8 @@ USER ${NB_USER}
 # Jupyter notebook extensions & packages
 RUN \
     # Python packages
-    pip install lightgbm papermill \
-    openpyxl pyreadr networkx joypy && \
+    # pip install lightgbm papermill \
+    # openpyxl pyreadr networkx joypy && \
     \
     # Install Jupyter Notebook extensions
     pip install jupyter_contrib_nbextensions jupyter_nbextensions_configurator && \
@@ -213,10 +213,10 @@ RUN \
     nbdime extensions --enable --sys-prefix
     
 # Other Python packages    
-RUN conda install -y -c conda-forge cartopy && \
-    conda clean --all -f -y && \
-    fix-permissions "${CONDA_DIR}" && \
-    fix-permissions "/home/${NB_USER}"
+# RUN conda install -y -c conda-forge cartopy && \
+#     conda clean --all -f -y && \
+#     fix-permissions "${CONDA_DIR}" && \
+#     fix-permissions "/home/${NB_USER}"
 
 # Jupyter Lab extensions
 # https://github.com/jupyterlab/jupyterlab-github
