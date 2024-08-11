@@ -12,6 +12,7 @@ services:
     environment:
       JUPYTER_ENABLE_LAB: 'yes'
       GRANT_SUDO: 'yes'
+      JUPYTERHUB_SINGLEUSER_APP: 'https://localhost:8889/rstudio/auth-sign-in?appUri=%2F'
     ports:
       - 8889:8888
     command: "start-notebook.sh \
