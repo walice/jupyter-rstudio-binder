@@ -16,6 +16,9 @@ services:
     ports:
       - 8889:8888
     command: "start-notebook.sh \
+              --NotebookApp.base_url=/ \
+              --NotebookApp.allow_origin='*' \
+              --NotebookApp.trust_xheaders=True \
               --NotebookApp.password=${PASSWD} \
               --NotebookApp.certfile=/etc/ssl/notebook/mycert.pem \
               --NotebookApp.keyfile=/etc/ssl/notebook/mykey.key"
