@@ -79,8 +79,9 @@ EXPOSE 8787
 RUN R -e "install.packages(c('IRkernel', 'ggplot2', 'dplyr', 'tidyr', 'shiny', 'rmarkdown'), repos='http://cran.rstudio.com/')" \
     && R -e "IRkernel::installspec(user = FALSE)"
 
+
 # Jupyter Server & RStudio configuration
-RUN pip install jupyter-server-proxy && \
+RUN pip install jupyter-server-proxy jupyter-rsession-proxy && \
     # Remove cache
     rm -rf ~/.cache/pip ~/.cache/matplotlib ~/.cache/yarn && \
     \
