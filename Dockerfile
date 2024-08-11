@@ -1,6 +1,7 @@
 FROM jupyter/scipy-notebook:ubuntu-22.04
 LABEL maintainer="Alice Lepissier <alice.lepissier@gmail.com>"
 
+
 ###### START Binder code ######
 ARG NB_USER
 ARG NB_UID
@@ -14,10 +15,13 @@ USER root
 RUN chown -R ${NB_UID} ${HOME}
 ###### END Binder code ######
 
+
 USER root
+
 
 ###### START R code ######
 # R pre-requisites
+# https://cloud.r-project.org/bin/linux/ubuntu/
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
     gnupg \
@@ -41,25 +45,37 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 ###### END R code ######
 
-# # RStudio pre-requisites
-# RUN apt-get update && apt-get install -y --no-install-recommends \
-#     libssl-dev \
-#     libclang-dev \
-#     libxkbcommon-x11-0 && \
-#     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-# # Install RStudio
-# ENV RSTUDIO_VERSION=2024.04.2+764
-# ENV PATH=$PATH:/${NB_USER}/lib/rstudio-server/bin \
-#     R_HOME=/opt/conda/lib/R
-# ARG LITTLER=${R_HOME}/library/littler
+###### Start RStudio code ######
+# Install RStudio Server and dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    psmisc \
+    libssl-dev \
+    libclang-dev \
+    libpq5 \
+    wget && \
+    wget https://download2.rstudio.org/server/jammy/amd64/rstudio-server-2023.06.1-524-amd64.deb && \
+    dpkg -i rstudio-server-2023.06.1-524-amd64.deb && \
+    apt-get install -f && \
+    rm rstudio-server-2023.06.1-524-amd64.deb
 
-# RUN wget https://download1.rstudio.org/electron/jammy/amd64/rstudio-2024.04.2-764-amd64.deb \
-#     && dpkg -i rstudio-2024.04.2-764-amd64.deb \
-#     && apt-get install -f \
-#     && rm rstudio-2024.04.2-764-amd64.deb
+# Set up RStudio Server configuration
+RUN echo "www-port=8787" >> /etc/rstudio/rserver.conf && \
+    echo "auth-none=1" >> /etc/rstudio/rserver.conf && \
+    echo "server-user=${NB_USER}" >> /etc/rstudio/rserver.conf
 
+# Ensure the RStudio Server runs as the notebook user
+RUN usermod -aG sudo ${NB_USER} && \
+    echo "${NB_USER} ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
+
+# Expose RStudio on port 8787
+EXPOSE 8787
+##### END RStudio code ######
+
+
+###### Start Jupyter code ######
 # Configure R to work with Jupyter
+# https://irkernel.github.io/installation/
 RUN R -e "install.packages(c('IRkernel', 'ggplot2', 'dplyr', 'tidyr', 'shiny', 'rmarkdown'), repos='http://cran.rstudio.com/')" \
     && R -e "IRkernel::installspec(user = FALSE)"
 
@@ -73,8 +89,11 @@ RUN pip install jupyter-server-proxy && \
     fix-permissions /home/${NB_USER}
 ##### END Jupyter code ######
 
-# Expose RStudio on port 8787
-# EXPOSE 8787
 
 # # Start RStudio server
 # CMD ["sh", "-c", "jupyter notebook & rstudio-server start && tail -f /dev/null"]
+# Run RStudio Server as the main command
+# CMD ["/usr/lib/rstudio-server/bin/rserver", "--server-daemonize=0"]
+
+# Final setup
+USER ${NB_USER}
