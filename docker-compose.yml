@@ -1,10 +1,9 @@
-version: '3'
 services:
   notebook:
+    image: alicesoto/jupyter-rstudio-binder:${TAG:-latest}
     build:
       context: ./
       dockerfile: Dockerfile
-    image: alicesoto/jupyter-rstudio-binder:${TAG:-latest}
     volumes:
       - ${HOST_DIR}:/home/jovyan/work
       - ${CERT_DIR}:/etc/ssl/notebook
